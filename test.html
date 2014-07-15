@@ -9,10 +9,8 @@
 </head>
 
 <body>
-<table class="ui-container">
-<tr>
-<td colspan="2" id="top-banner-container">
-<div id="top-banner">
+<div id="container">
+    <div id="topbar">
 	<div id="app-title">
 	&nbsp;&nbsp;ImgFx
 	</div>
@@ -20,39 +18,26 @@
 	<div id="new-document" class="menu-icons"></div>
 	<div id="del-document" class="menu-icons"></div>
 	</div>
-</div>
-</td>
-</tr>
-<tr>
-<td id="sidebar-container">
-<div id="sidebar">
-	<div id="toolbox-title">Toolbox</div>
-	<div id="toolbar">
+	</div>
+    <div id="main">
+        <div id="sidebar">
+		<div id="toolbox-title">Toolbox</div>
+		<div id="toolbar">
 	
-	</div>
+		</div>
+		</div>
+        <div id="app">
+			<div id="work-container">
+            <div id="work-area">
+			<canvas id="drawing-canvas"></canvas>
+			</div>
+			</div>
+            <div id="effects"></div>
+        </div>
+    </div>
 </div>
-</td>
-<td id="canvas-container">
-<div id="canvas">
-	<div id="work-area">
-		<canvas id="drawing-canvas"></canvas>
-	</div>
-</div>
-</td>
-</tr>
-<tr>
-<td id="filler"></td>
-<td id="effects-preview-container">
-<div id="effects-preview">
-<div class="preview-thumbnail" id="blur">Blur</div>
-<div class="preview-thumbnail" id="grayscale">GrayScale</div>
-<div class="preview-thumbnail" id="contrast">Contrast</div>
-</div>
-</td>
-</tr>
-</table>
 <script src="filters.js"></script>
-<script src="app.js">window.location.reload();</script>
+<script src="app.js"></script>
 </body>
 
 </html>

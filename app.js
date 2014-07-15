@@ -1,7 +1,6 @@
 ﻿var ImgFx = (function() {
 	
 	var upload = document.createElement('input');
-	var event = new Event('click');
 	var canvas = document.getElementById('drawing-canvas');
 	var workarea = document.getElementById('work-area');
 	var context = canvas.getContext('2d');
@@ -14,7 +13,7 @@
 	upload.addEventListener('change', read_file, false);
 	document.getElementById('new-document').addEventListener('click', display_file_dialog, false);
 	document.getElementById('del-document').addEventListener('click', restore_canvas, false);
-	document.getElementById('blur').addEventListener('click', blur, false);
+	//document.getElementById('blur').addEventListener('click', blur, false);
 	
 	function blur() {
 		var input = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -32,7 +31,7 @@
 	
 	function restore_canvas() {
 		workarea.style.height = '100%';
-		workarea.style.width = '100%';
+		workarea.style.width = '98%';
 		canvas.height = canvas.width;
 	}
 	
@@ -50,7 +49,10 @@
 	}
 	
 	function display_file_dialog() {
-		upload.dispatchEvent(event);
+		//var event = new Event('click');
+		//upload.dispatchEvent(event);
+		upload.click();
+		console.log('triggering...');
 	}
 	
 	
