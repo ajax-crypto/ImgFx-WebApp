@@ -4,7 +4,8 @@
 	{
 		NOT : 0,
 		PENCIL : 1,
-		POLYGON : 2
+		POLYGON : 2,
+		FILL : 3
 	});
 	var current_tool = tool_list.NOT;
 	
@@ -14,6 +15,7 @@
 	var context = canvas.getContext('2d');
 	var img = document.createElement('img');
 	var tools = document.getElementsByClassName('tool-container');
+	var layers = [];
 	
 	var tool_events = new Array(tools.length);
 	try {
@@ -35,6 +37,7 @@
 						context.beginPath();
 						context.moveTo(prev_point.x, prev_point.y);
 						context.lineTo(pos.x, pos.y);
+						context.closePath();
 						context.stroke();
 						prev_point = pos;
 					}
@@ -62,6 +65,8 @@
 			function add_handler() {
 				current_tool = tool_list.PENCIL ;
 				canvas.style.cursor = 'url(svg/pencil43.svg), auto';
+				context.lineWidth = 5;
+				context.lineJoin = 'round';
 				for(var i = 0; i < event_handlers.length; ++i)
 					canvas.addEventListener(event_handlers[i].name, event_handlers[i].handler, false);
 			}
@@ -126,6 +131,105 @@
 				remove : remove_handler
 			}
 		}());
+		
+		tool_events[tool_list.FILL] = (function() {
+			
+			var event_handlers = [
+			{
+				name : 'click',
+				handler : function (evt) {
+					var start = get_location(evt); 
+					var colorLayer = context.getImageData(0, 0, canvas.width, canvas.height);
+					var original = Filters.getColor(colorLayer, start.x, start.y);
+					var canvasWidth = canvas.width, canvasHeight = canvas.height ;
+					var fill = { r : 25, g : 34, b : 56 };
+					var pixelStack = [[start.x, start.y]];
+
+					while(pixelStack.length) {
+						var newPos, x, y, pixelPos, reachLeft, reachRight;
+						newPos = pixelStack.pop();
+						x = newPos[0];
+						y = newPos[1];
+					  
+						pixelPos = (y*canvasWidth + x) * 4;
+						while(y-- >= 0 && matchStartColor(pixelPos)) {
+							pixelPos -= canvasWidth * 4;
+						}
+						pixelPos += canvasWidth * 4;
+						++y;
+						reachLeft = false;
+						reachRight = false;
+						while(y++ < canvasHeight-1 && matchStartColor(pixelPos)) {
+							colorPixel(pixelPos);
+
+							if(x > 0) {
+								if(matchStartColor(pixelPos - 4)) {
+									if(!reachLeft){
+										pixelStack.push([x - 1, y]);
+										reachLeft = true;
+									}
+								}
+								else if(reachLeft) {
+									reachLeft = false;
+								}
+							}
+						
+							if(x < canvasWidth-1) {
+								if(matchStartColor(pixelPos + 4)) {
+									if(!reachRight) {
+										pixelStack.push([x + 1, y]);
+										reachRight = true;
+									}
+								}
+								else if(reachRight) {
+									reachRight = false;
+								}
+							}
+								
+							pixelPos += canvasWidth * 4;
+						}
+					}
+					context.putImageData(colorLayer, 0, 0);
+					  
+					function matchStartColor(pixelPos)
+					{
+					  var r = colorLayer.data[pixelPos];	
+					  var g = colorLayer.data[pixelPos+1];	
+					  var b = colorLayer.data[pixelPos+2];
+
+					  return (r == original.r && g == original.g && b == original.b);
+					}
+
+					function colorPixel(pixelPos)
+					{
+					  colorLayer.data[pixelPos] = fill.r;
+					  colorLayer.data[pixelPos+1] = fill.g;
+					  colorLayer.data[pixelPos+2] = fill.b;
+					  colorLayer.data[pixelPos+3] = 255;
+					}
+				}
+			}
+			];
+			
+			function add_handler() {
+				current_tool = tool_list.FILL ;
+				canvas.style.cursor = 'url(svg/paint2.svg), auto';
+				for(var i = 0; i < event_handlers.length; ++i)
+					canvas.addEventListener(event_handlers[i].name, event_handlers[i].handler, false);
+			}
+			
+			function remove_handler() {
+				current_tool = tool_list.NOT;
+				canvas.style.cursor = 'default';
+				for(var i = 0; i < event_handlers.length; ++i)
+					canvas.removeEventListener(event_handlers[i].name, event_handlers[i].handler, false);
+			}
+			
+			return {
+				add : add_handler,
+				remove : remove_handler
+			}
+		}());
 	}
 	catch(err) {
 		console.log('handler not available');
@@ -153,6 +257,19 @@
 		var offset = get_offset(canvas) ;
 		return { x: evt.pageX - offset.left,
 		         y: evt.pageY - offset.top }; 
+	}
+	
+	function generate_layer() {
+		var layer = document.createElement('canvas');
+		var pos = canvas.getBoundingClientRect();
+		layer.style.position = 'absolute' ;
+		layer.style.top = pos.top ;
+		layer.style.left = pos.left ;
+		layer.style.height = canvas.clientHeight + 'px';
+		layer.height = canvas.clientHeight ;
+		layer.style.width = canvas.clientWidth + 'px';
+		layer.width = canvas.clientWidth ;
+		return layer ;
 	}
 	
 	/******************************************************************

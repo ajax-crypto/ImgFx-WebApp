@@ -32,29 +32,52 @@
 			</div>
 		</div>
 		<div class="tool-pair">
-			<div class="tool-container left">
-			<div class="tool-size" id="eraser-tool"></div>
-			</div>
 			<div class="tool-container right">
 			<div class="tool-size" id="fill-tool"></div>
+			</div>
+			<div class="tool-container left">
+			<div class="tool-size" id="eraser-tool"></div>
 			</div>
 		</div>
 		</div>
 		</div>
         <div id="app">
+			<div id="main-panel">
 			<div id="work-container">
             <div id="work-area">
 			<canvas id="drawing-canvas"></canvas>
 			</div>
 			</div>
+			<div id="layer-container">
+			<div id="layer-title">
+			Layers
+			</div>
+			</div>
+			<div style="clear : both; "></div>
+			</div>
             <div id="effects">
 			<div id="attributes"></div>
 			</div>
         </div>
+		<div style="clear : both; "></div>
     </div>
 </div>
+<script src="queue.js"></script>
 <script src="filters.js"></script>
 <script src="app.js"></script>
+<script>
+function resize() {
+	var ele = document.getElementById('work-container');
+	var padding = window.getComputedStyle(ele, null).getPropertyValue('padding-left');
+	console.log('padding : ' + padding);
+	ele.style.paddingTop = padding + 'px';
+	ele.style.paddingBottom = padding + 'px';
+	ele.style.height = (ele.clientHeight - (2 * padding)) + 'px';
+}
+resize();
+
+window.addEventListener('resize', resize, false);	
+</script>
 </body>
 
 </html>

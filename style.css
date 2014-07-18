@@ -53,6 +53,12 @@
 	align-items: center;
 }
 
+#main-panel {
+	height : 80%;
+    width : 100%;
+	overflow : auto;
+}
+
 #work-area {
 	background-color : white;
 	height : 100%;
@@ -64,14 +70,33 @@
 }
 
 #work-container {
-	height : 76%;
-    width : 96%;
+	height : 100%;
+    width : 81%;
     background-color : #cfd8dc;
-	padding : 2%;
+	padding-left : 2%;
+	padding-right : 2%;
 	overflow : auto;
 	display: flex;
 	justify-content: center; 
 	align-items: center;
+	float : left;
+}
+
+#layer-container {
+	float : right;
+	width : 15%;
+	height : 100%;
+	background-color : #607d8b;
+}
+
+#layer-title {
+	height : 40px;
+	width : 100%;
+	color : white;
+	line-height : 200%;
+	font-size : 14pt;
+	display : inline-block;
+	text-align : center;
 }
 
 #toolbar {
@@ -124,6 +149,10 @@
 
 #polygon-tool {
 	background : url(svg/irregular10.svg) no-repeat;
+}
+
+#fill-tool {
+	background : url(svg/paint2.svg) no-repeat;
 }
 
 #effects {

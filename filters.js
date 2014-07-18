@@ -552,6 +552,7 @@ var Filters = (function() {
 		emboss : emboss,
 		lighten : lighten,
 		darken : darken,
-		ASCII : ASCII
+		ASCII : ASCII,
+		getColor : getColor
 	};
 }());

@@ -5,11 +5,15 @@
 /imgfx/test.html
 /imgfx/app.js
 /imgfx/filters.js
+/imgfx/queue.js
 /imgfx/crossdomain.xml
 /imgfx/svg/close32.svg
 /imgfx/svg/closeh.svg
 /imgfx/svg/document6.svg
 /imgfx/svg/document6h.svg
+/imgfx/svg/paint2.svg
+/imgfx/svg/pencil32.svg
+/imgfx/svg/irregular10.svg
 
 NETWORK:
 *
